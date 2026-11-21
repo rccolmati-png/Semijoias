@@ -1,0 +1,48 @@
+name: Colmati
+options:
+  bundleIdPrefix: br.com.colmati
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.7.1"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGN_IDENTITY: ""
+targets:
+  Colmati:
+    type: application
+    platform: iOS
+    sources:
+      - path: App/Sources
+      - path: App/Assets.xcassets
+      - path: App/www
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: br.com.colmati.semijoias
+        PRODUCT_NAME: Colmati
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: App/Info.plist
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Colmati
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        LSRequiresIPhoneOS: true
+        UILaunchScreen:
+          UIColorName: LaunchBg
+          UIImageName: LogoDourada
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIRequiresFullScreen: true
+        ITSAppUsesNonExemptEncryption: false
+        NSCameraUsageDescription: Para fotografar as peças nas compras.
+        NSPhotoLibraryUsageDescription: Para escolher a foto da peça na galeria.
+        NSFaceIDUsageDescription: Para proteger o acesso ao app com Face ID.
