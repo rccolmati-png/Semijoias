@@ -1,0 +1,46 @@
+name: Gerar .ipa (sem assinatura, para o Sideloadly)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar XcodeGen
+        run: brew install xcodegen
+
+      - name: Gerar o projeto Xcode
+        run: xcodegen generate
+
+      - name: Compilar (Release, sem assinatura)
+        run: |
+          xcodebuild \
+            -project Colmati.xcodeproj \
+            -scheme Colmati \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Montar o .ipa
+        run: |
+          APP=$(find build/Build/Products -name "Colmati.app" -maxdepth 3 | head -n 1)
+          echo "App: $APP"
+          rm -rf Payload Colmati.ipa
+          mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry Colmati.ipa Payload
+          ls -la Colmati.ipa
+
+      - name: Publicar o .ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: Colmati-ipa
+          path: Colmati.ipa
